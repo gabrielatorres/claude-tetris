@@ -52,7 +52,7 @@ with no error.
 `game.js:31-41` looks up every element by id at the top level, with no `DOMContentLoaded`
 guard -- this works only because `<script src="game.js">` sits at the end of `<body>`.
 The required ids are: `board`, `next-canvas`, `score`, `lines`, `level`, `overlay`,
-`overlay-title`, `overlay-score`, `restart-btn`. Renaming one in `index.html` yields
+`overlay-title`, `overlay-score`, `restart-btn`, `theme-toggle`, `theme-label`. Renaming one in `index.html` yields
 `null` at load and throws later, when a handler first touches it.
 
 A single `#overlay` element serves both states: `togglePause()` and `endGame()` swap its

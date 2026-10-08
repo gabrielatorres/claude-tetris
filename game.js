@@ -39,8 +39,12 @@ const overlay = document.getElementById('overlay');
 const overlayTitle = document.getElementById('overlay-title');
 const overlayScore = document.getElementById('overlay-score');
 const restartBtn = document.getElementById('restart-btn');
+const themeToggle = document.getElementById('theme-toggle');
+const themeLabel = document.getElementById('theme-label');
 
 let board, current, next, score, lines, level, paused, gameOver, lastTime, dropAccum, dropInterval, animId;
+// Estado del tema: no es estado de partida, así que init() no lo reinicia
+let gridColor = '#22222e';
 
 function createBoard() {
   return Array.from({ length: ROWS }, () => new Array(COLS).fill(0));
@@ -169,7 +173,7 @@ function drawBlock(context, x, y, colorIndex, size, alpha) {
 }
 
 function drawGrid() {
-  ctx.strokeStyle = '#22222e';
+  ctx.strokeStyle = gridColor;
   ctx.lineWidth = 0.5;
   for (let c = 1; c < COLS; c++) {
     ctx.beginPath();
@@ -300,5 +304,20 @@ document.addEventListener('keydown', e => {
 });
 
 restartBtn.addEventListener('click', init);
+
+function applyTheme(light) {
+  document.body.classList.toggle('light', light);
+  themeToggle.setAttribute('aria-checked', String(light));
+  themeLabel.textContent = light ? 'Modo oscuro' : 'Modo claro';
+  gridColor = getComputedStyle(document.body).getPropertyValue('--grid').trim();
+  // Repintar aunque el juego esté en pausa o terminado
+  draw();
+  drawNext();
+}
+
+themeToggle.addEventListener('click', () => {
+  applyTheme(!document.body.classList.contains('light'));
+  themeToggle.blur(); // evita que Space/flechas vuelvan a activar el botón
+});
 
 init();
